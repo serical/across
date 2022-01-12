@@ -195,16 +195,6 @@ get_latest_version() {
     [ -z "${deb_name}" ] && _error "Getting Linux kernel binary package name failed, maybe kernel build failed. Please choose other one and try again."
 }
 
-get_char() {
-    SAVEDSTTY=`stty -g`
-    stty -echo
-    stty cbreak
-    dd if=/dev/tty bs=1 count=1 2> /dev/null
-    stty -raw
-    stty echo
-    stty $SAVEDSTTY
-}
-
 check_bbr_status() {
     local param=$(sysctl net.ipv4.tcp_congestion_control | awk '{print $3}')
     if [[ x"${param}" == x"bbr" ]]; then
@@ -313,12 +303,12 @@ reboot_os() {
     echo
     _info "The system needs to reboot."
     read -p "Do you want to restart system? [y/n]" is_reboot
-    if [[ ${is_reboot} == "y" || ${is_reboot} == "Y" ]]; then
+    # if [[ ${is_reboot} == "y" || ${is_reboot} == "Y" ]]; then
         reboot
-    else
-        _info "Reboot has been canceled..."
-        exit 0
-    fi
+    # else
+    #     _info "Reboot has been canceled..."
+    #     exit 0
+    # fi
 }
 
 install_bbr() {
@@ -356,8 +346,5 @@ echo " Automatically enable TCP BBR script"
 echo
 echo " URL: https://teddysun.com/489.html"
 echo "----------------------------------------"
-echo
-echo "Press any key to start...or Press Ctrl+C to cancel"
-char=$(get_char)
 
 install_bbr 2>&1 | tee ${cur_dir}/install_bbr.log
