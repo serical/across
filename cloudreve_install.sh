@@ -63,4 +63,4 @@ systemctl daemon-reload
 # 设置开机启动
 systemctl enable cloudreve
 # 启动服务
-systemctl start cloudreve
+systemctl restart cloudreve
