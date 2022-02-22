@@ -4,11 +4,12 @@
 cloudreve_prefix=/usr/local/cloudreve
 cloudreve_service=/etc/systemd/system/cloudreve.service
 
-if [ -d "$cloudreve_prefix" ]; then
-    echo "检测到CloudReve安装目录"
-    rm -rf $cloudreve_prefix
-else
-    echo '未检测到CloudReve安装目录'
+if systemctl status cloudreve >/dev/null 2>&1; then
+    echo "检测到CloudReve进程"
+    systemctl stop cloudreve
+    systemctl disable cloudreve
+    systemctl daemon-reload
+else echo "未检测到CloudReve进程"
 fi
 
 if [ -f "$cloudreve_service" ]; then
@@ -17,12 +18,11 @@ if [ -f "$cloudreve_service" ]; then
 else echo "未检测到CloudReve服务目录"
 fi
 
-if systemctl status cloudreve >/dev/null 2>&1; then
-    echo "检测到CloudReve进程"
-    systemctl stop cloudreve
-    systemctl disable cloudreve
-    systemctl daemon-reload
-else echo "未检测到CloudReve进程"
+if [ -d "$cloudreve_prefix" ]; then
+    echo "检测到CloudReve安装目录"
+    rm -rf $cloudreve_prefix
+else
+    echo '未检测到CloudReve安装目录'
 fi
 
 yum install -y wget
