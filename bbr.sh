@@ -172,7 +172,7 @@ get_latest_version() {
     [ ${#latest_version[@]} -eq 0 ] && _error "Get latest kernel version failed."
     kernel_arr=()
     for i in ${latest_version[@]}; do
-        if _version_ge $i 5.9; then
+        if _version_ge $i 5.15; then
             kernel_arr+=($i);
         fi
     done
